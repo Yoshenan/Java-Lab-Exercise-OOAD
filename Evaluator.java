@@ -1,26 +1,21 @@
 
 public class  Evaluator  {
   Student student;
-  Evaluation.Methodology methodology;
-  Evaluation.ProblemClarity problemClarity;
-  Evaluation.Results results;
-  Evaluation.Presentation presentation;
-  
-  
+  Methodology methodology;
+  ProblemClarity problemClarity;
+  Results results;
+  Presentation presentation;
 
-  public Evaluator(Student student, Evaluation.Methodology methodology, Evaluation.ProblemClarity problemClarity , Evaluation.Results
-    results , Evaluation.Presentation presentation){
-     this.student = student;
-     this.methodology = methodology;
-     this.problemClarity = problemClarity;
-     this.results = results;
-     this.presentation = presentation;
+  public Evaluator(Student student, Methodology methodology , ProblemClarity problemClarity , Results results , Presentation presentation){
+    this.student = student;
+    this.methodology = methodology;
+    this.problemClarity = problemClarity;
+    this.results = results;
+    this.presentation = presentation;
      
   }
 
-  
-
-  abstract class Evaluation {
+  public abstract class Evaluation {
     protected String Rating;
     public double marks(){
             return switch (Rating) {
@@ -30,10 +25,12 @@ public class  Evaluator  {
             case "Poor" -> 1.0;
             default -> 0.0;
         };
+      }
   }
 
-   class ProblemClarity extends  Evaluation{
-    public String problemStatement;
+  public class ProblemClarity extends  Evaluation{
+    protected  String problemStatement;
+
     
     public ProblemClarity(String problemStatement){
       this.problemStatement = problemStatement;
@@ -45,11 +42,9 @@ public class  Evaluator  {
       };
     }
    }
-
-   
-  class Methodology extends Evaluation{
-    public String dataSampling;
-    public String researchDesign;
+  public class Methodology extends Evaluation{
+    protected String dataSampling;
+    protected  String researchDesign;
 
       public Methodology(String dataSampling , String researchDesign){
          this.dataSampling = dataSampling;
@@ -67,8 +62,8 @@ public class  Evaluator  {
       }
       }
 
-      class Results extends Evaluation{
-          public String resultEval;
+      public class Results extends Evaluation{
+          protected String resultEval;
 
           public Results(String resultEval){
             this.resultEval= resultEval;
@@ -82,36 +77,33 @@ public class  Evaluator  {
       }
     }
 
-       class Presentation extends Evaluation{
-        private String delivery;
-        private String visualAids;
+       public class Presentation extends Evaluation{
+        protected  String delivery;
+        protected  String visualAids;
 
         public Presentation(String delivery, String visualAids) {
         this.delivery = delivery.toLowerCase();
         this.visualAids = visualAids.toLowerCase();
-
-
-
         if (this.delivery.contains("confident") && this.visualAids.contains("professional")) {
             Rating = "Excellent";
         } 
         else if (this.delivery.contains("clear") || this.visualAids.contains("clean")) {
             Rating = "Good";
         } 
-        else if (this.delivery.contains("reading") || this.visualAids.contains("crowded")) {
+        else if (this.delivery.contains("not clear enough ") || this.visualAids.contains("crowded")) {
             Rating = "Fair";
         } 
         else {
             Rating = "Poor";
         }
     }
-}
-    
-
+  }
   public double EvaluationMarks(){
         return (problemClarity.marks() + methodology.marks()+  results.marks() + presentation.marks()) / 4.0;
   }
 
+  public double getEvaluationMarks(){
+    return EvaluationMarks();
+  }
 }
 
-}
