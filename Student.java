@@ -8,19 +8,17 @@ public class Student {
     public  String researchTitle;
     public  String Abstract;
     public  String supervisorName;
-    public  String materialPath;
     public  String presentationType;
+    public   String materialPath;
     public  Scanner sc = new Scanner(System.in);
     
 
-
-    public Student(){
-       
-       
+    public String getPresentationType(){
+        return presentationType();
     }
 
-    public String getPresentationType(){
-        return presentationType;
+    public String getMaterialPath(){
+        return this.materialPath;
     }
 
    
@@ -34,32 +32,29 @@ public class Student {
 
     }
 
-    public void presentationType(){
+    public String presentationType(){
         System.out.println("Enter type of presentation(oral/poster) ; ");
         String choice = sc.nextLine();
 
        if (choice.equals("oral") || choice.equals("poster")){
-        uploadMaterials(sc);
+          uploadMaterials("");
        } else{
         System.out.println("Invalid try again");
        }
-        
+        return choice;
 
     }
 
-    public void uploadMaterials(Scanner sc){
-            System.out.println("Enter materials path : ");
-            String materialPath = sc.nextLine();
+    public boolean uploadMaterials(String path){
             
-            File file = new File(materialPath);
+            File file = new File(path);
              
             if(file.exists() && file.isFile()){
-                System.out.println("Material uploaded successfully");
+                this.materialPath = path;
+                return true;
             } else{
-                  System.out.println("File not found. Please try again.");
-                  uploadMaterials(sc);
+                  return false;
+                  
             }
          }  
-
-    
 }

@@ -1,0 +1,11 @@
+
+
+{
+    
+   
+  "Researchtitle ": "",
+  "Abstract " : "",
+  "supervisor name  " : "" ,
+  "material path " : " ",
+  "presentaation type" : ""
+}
