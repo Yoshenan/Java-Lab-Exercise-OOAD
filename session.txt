@@ -1,0 +1,13 @@
+2024/11/20,Teams,OnlineScheduled
+2024/11/20,Teams,OnlineScheduled
+2024-11-11,Teams,OnlineScheduled
+2024-11-11,Teams,OnlineScheduled
+2024-11-11,Teams,OnlineScheduled
+2024/11/10,teams,online0,TBD,TBD
+2024/11/10,teams,online0,TBD,TBD
+2024/11/12,Teams,Online,1,null,TBD
+2025-11-11,Teams,Online,1,null,TBD
+2026-11-11,Teams,Online,1,Han,Hannah
+2026-11-11,Teams,Online,1,null,Hannah
+2020-11-11,hall,Physical,1,Yosh,Evam
+2020-11-11,hall,Physical,1,NAT,Evam
