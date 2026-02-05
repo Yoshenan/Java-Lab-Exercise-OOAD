@@ -1,6 +1,5 @@
 
 import java.io.File;
-import java.util.Scanner;
 
 public class Student {
     
@@ -10,12 +9,9 @@ public class Student {
     public  String supervisorName;
     public  String presentationType;
     public   String materialPath;
-    public  Scanner sc = new Scanner(System.in);
+   
     
 
-    public String getPresentationType(){
-        return presentationType();
-    }
 
     public String getMaterialPath(){
         return this.materialPath;
@@ -32,29 +28,16 @@ public class Student {
 
     }
 
-    public String presentationType(){
-        System.out.println("Enter type of presentation(oral/poster) ; ");
-        String choice = sc.nextLine();
-
-       if (choice.equals("oral") || choice.equals("poster")){
-          uploadMaterials("");
-       } else{
-        System.out.println("Invalid try again");
-       }
-        return choice;
-
+    public boolean uploadMaterials(String path) {
+        if (path == null || path.isEmpty()) return false;
+        
+        File file = new File(path);
+        if (file.exists() && file.isFile()) {
+            this.materialPath = path; 
+            return true;
+        }
+        return false;
     }
 
-    public boolean uploadMaterials(String path){
-            
-            File file = new File(path);
-             
-            if(file.exists() && file.isFile()){
-                this.materialPath = path;
-                return true;
-            } else{
-                  return false;
-                  
-            }
-         }  
+
 }
