@@ -11,7 +11,7 @@ public class GUI extends JFrame {
     final  private JPanel mainPanel = new JPanel(cardLayout);
     final private coordinator coord = new coordinator();
 
-    
+
     private JTextField titleIn;
     private JTextField abstractIn;
     private JTextField supervisorIn;
@@ -120,6 +120,15 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Please fill all fields!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (!dateIn.getText().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
+        JOptionPane.showMessageDialog(this, "Invalid Date Format! Please use YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (coord.isDateTaken(dateIn.getText())) {
+        JOptionPane.showMessageDialog(this, "The date '" + dateIn + "' is already scheduled for another seminar ,Scheduling Conflict");
+        return;
+    }
+
         coord.addSession(dateIn.getText(), venueIn.getText(), typeIn.getText(),
                          presenterIn.getText(), evaluatorsIn.getText());
         table.setModel(coord.getSessionsModel());
@@ -165,12 +174,15 @@ public class GUI extends JFrame {
         JLabel statusLabel = new JLabel("No file selected");
         JButton viewAwardsBtn = new JButton("View Award Winners");
 
+         JTable table = new JTable();
+        ResBtn.addActionListener(x -> {
+            table.setModel(FileManager.getEvaluatorView());
+        });
+
         viewAwardsBtn.addActionListener(e -> {
          String winners = coord.getWinnersList();
          JOptionPane.showMessageDialog(this, winners, "Award Hall of Fame", JOptionPane.INFORMATION_MESSAGE);
         });
-
-        JTable table = new JTable();
         JScrollPane scroll = new JScrollPane(table);
 
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
@@ -192,15 +204,22 @@ public class GUI extends JFrame {
         mainPanel.add(scroll, BorderLayout.CENTER);
 
         viewBtn.addActionListener(e -> table.setModel(coord.getSessionsModel()));
-         table.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mouseClicked(java.awt.event.MouseEvent e) {
         int row = table.getSelectedRow();
-        String status = table.getValueAt(row, 3).toString();
-        
-        if (status.equals("Available")) {
-            coord.selectSchedule(row);
-            table.setModel(coord.getSessionsModel()); }}});
+        if (row != -1) {
+            String status = table.getValueAt(row, 3).toString();
+            
+            if (status.equalsIgnoreCase("Available")) {
+                coord.selectSchedule(row); 
+                table.setModel(coord.getSessionsModel());
+                
+                JOptionPane.showMessageDialog(null, "Session Booked Successfully!");
+            }
+        }
+    }
+});
    uploadBtn.addActionListener(e -> {
     JFileChooser chooser = new JFileChooser();
     if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
