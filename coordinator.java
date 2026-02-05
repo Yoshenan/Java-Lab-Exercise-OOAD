@@ -1,5 +1,8 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+
 
 public class coordinator {
     private String name;
@@ -34,34 +37,45 @@ public class coordinator {
             out.println(date + "," + venue + "," + type + ",0," + Presentor +","+ Evaluator);
         } catch (IOException e) {}
     }
-public void selectSchedule(int targetRow) {
-    StringBuilder allData = new StringBuilder();
-    int i = 0;
-    
-    try (BufferedReader read = new BufferedReader(new FileReader(SESSION_FILE))) {
-        String line;
-        while ((line = read.readLine()) != null) {
-            String[] p = line.split(",");
-            if (i == targetRow) {
-                // If status is "0" (Available)
-                if (p[3].trim().equals("0")) {
-                    // SAFETY: If current object name is null, use the name already in file (p[4])
-                    String activeName = (this.name != null && !this.name.equals("null")) ? this.name : p[4];
-                    
-                    // Reconstruct: Date, Venue, Type, Status(1), Presenter, Evaluator
-                    line = p[0] + "," + p[1] + "," + p[2] + ",1," + activeName + "," + (p.length > 5 ? p[5] : "TBD");
-                }
-            }
-            allData.append(line).append("\n");
-            i++; 
-        }
-    } catch (IOException e) { e.printStackTrace(); }
+public void selectSchedule(int rowIndex) {
+    List<String> lines = new ArrayList<>();
 
-    // Save the updated data back to the file
-    try (PrintWriter write = new PrintWriter(new FileWriter(SESSION_FILE))) {
-        write.print(allData.toString());
-    } catch (Exception e) { e.printStackTrace(); }
+    try (BufferedReader br = new BufferedReader(new FileReader(SESSION_FILE))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (!line.trim().isEmpty()) { 
+                lines.add(line);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        return;
+    }
+
+    if (rowIndex >= 0 && rowIndex < lines.size()) {
+        String[] data = lines.get(rowIndex).split(",", -1);
+        if (data.length >= 3) {
+            String date = data[0];
+            String venue = data[1];
+            String type = data[2];
+            String presenter = (data.length > 4) ? data[4] : "TBD";
+            String evaluators = (data.length > 5) ? data[5] : "TBD";
+            
+            String updatedLine = date + "," + venue + "," + type + ",1," + presenter + "," + evaluators;
+            lines.set(rowIndex, updatedLine);
+        }
+    }
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(SESSION_FILE))) {
+        for (String s : lines) {
+            bw.write(s);
+            bw.newLine();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 }
+
     public String[] getStudentDetails(String id) {
     if (id == null || id.trim().isEmpty()) {return null; }
     try (BufferedReader br = new BufferedReader(new FileReader(SESSION_FILE))) {
@@ -82,8 +96,6 @@ public void selectSchedule(int targetRow) {
     } catch (IOException e) { e.printStackTrace(); }
 }
 
-
-
 public String getWinnersList() {
     StringBuilder sb = new StringBuilder("--- Current Award Winners ---\n");
     try (BufferedReader br = new BufferedReader(new FileReader(AWARD_FILE))) {
@@ -97,5 +109,24 @@ public String getWinnersList() {
     } catch (IOException e) { return "No awards assigned yet."; }
     return sb.toString();
 }
+
+
+public boolean isDateTaken(String date) {
+        File file = new File(SESSION_FILE);
+        if (!file.exists()) return false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(SESSION_FILE))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] row = line.split(",");
+                if (row.length > 0 && row[0].trim().equalsIgnoreCase(date.trim())) {
+                    return true; 
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; 
+    }
 
 }

@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 public class FileManager {
     private static final String FILE_PATH = "seminars.txt";
 
-    // 1. SAVE: Records new seminar data
     public static void saveSeminar(String id, String Name, Student s, double marks, String eval) {
         String path = (s.getMaterialPath() == null || s.getMaterialPath().isEmpty()) ? "None" : s.getMaterialPath();
         String data = id + "," + Name + "," + s.researchTitle + "," + s.supervisorName + "," + 
@@ -19,7 +18,6 @@ public class FileManager {
         }
     }
 
-    // 2. VIEW: Prepares the table model for the Evaluator
     public static DefaultTableModel getEvaluatorView() {
         String[] columns = {"ID", "Student Name", "Research Title", "Type", "Abstract", "Marks", "Evaluator"};
         DefaultTableModel model = new DefaultTableModel(columns, 0);
@@ -35,7 +33,6 @@ public class FileManager {
         return model;
     }
 
-    // 3. UPDATE: Updates marks and evaluator name for a specific student ID
     public static void updateMarks(String studentId, double marks, String EvalName) {
         StringBuilder data = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
@@ -43,7 +40,6 @@ public class FileManager {
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split(",");
                 if (p.length > 0 && p[0].trim().equals(studentId.trim())) {
-                    // Re-indexes: 0:ID, 1:Name, 2:Title, 3:Super, 4:Abs, 5:Type, 6:Path, 7:Marks, 8:Eval
                     line = p[0] + "," + p[1] + "," + p[2] + "," + p[3] + "," + p[4] + "," + 
                            p[5] + "," + p[6] + "," + marks + "," + EvalName;
                 }
@@ -56,7 +52,6 @@ public class FileManager {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    // 4. SEARCH: Finds full student details by Name (Required by Coordinator)
     public static String[] getStudentDetailsByName(String name) {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -70,7 +65,6 @@ public class FileManager {
         return null;
     }
 
-    // 5. FILE PATH: Gets the material path by student ID
     public static String getFilePathForStudent(String id) {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -85,7 +79,7 @@ public class FileManager {
         return null;
     }
 
-    // 6. EXPORT: Saves a JTable's data into a CSV file
+
     public static void exportCsv(JTable table){
         JFileChooser choose = new JFileChooser();
         choose.setDialogTitle("Save as CSV");

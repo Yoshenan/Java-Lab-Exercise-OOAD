@@ -1,1 +1,4 @@
-243,Yosh,whghwggws,dhhvwhwh,wiyghwwh,whdvjhhwjddw,C:\Users\Admin\Documents\Tut08_242UC244GD.docx,3.5,Yosh
+
+243,Yosh,Intro to data computing,Ben,Importance of data computing,Oral,C:\Users\Admin\Documents\Tut08_242UC244GD.docx,3.5,Yosh
+243,Yosh,machine learning,Ahmad,Importance of machine learning,Oral,C:\Users\Admin\Documents\Tut08_242UC244GD.docx,0.0,Yosh
+
